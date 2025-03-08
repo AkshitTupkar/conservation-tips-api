@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Conservation Tips</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        textarea { width: 100%; height: 100px; }
+        button { margin-top: 10px; }
+        #tips { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Electricity Conservation Tips</h1>
+    <p>Enter your school's electricity consumption data:</p>
+    <textarea id="dataInput" placeholder="Example: Monthly consumption: 1200 kWh..."></textarea>
+    <br>
+    <button onclick="getTips()">Get Conservation Tips</button>
+
+    <h2>Conservation Tips:</h2>
+    <div id="tips"></div>
+
+    <script>
+        async function getTips() {
+            const data = document.getElementById('dataInput').value;
+            const tipsDiv = document.getElementById('tips');
+
+            tipsDiv.innerHTML = 'Generating tips...';
+
+            const response = await fetch('http://localhost:3000/generate-tips', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data })
+            });
+
+            const result = await response.json();
+
+            if (result.tips) {
+                tipsDiv.innerHTML = `<pre>${result.tips}</pre>`;
+            } else {
+                tipsDiv.innerHTML = 'Failed to generate tips.';
+            }
+        }
+    </script>
+</body>
+</html>
